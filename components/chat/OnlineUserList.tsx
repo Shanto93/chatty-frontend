@@ -10,16 +10,16 @@ interface OnlineUser {
 }
 
 export default function OnlineUserList() {
-  const socket = useSocket();
+  const { socket, isConnected } = useSocket();
   const [users, setUsers] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !isConnected) return;
 
     const handler = (data: OnlineUser) => {
       setUsers((prev) => ({
         ...prev,
-        [data.userId]: data.online
+        [data.userId]: data.online,
       }));
     };
 
@@ -28,7 +28,7 @@ export default function OnlineUserList() {
     return () => {
       socket.off("presence_update", handler);
     };
-  }, [socket]);
+  }, [socket, isConnected]);
 
   const entries = Object.entries(users);
 

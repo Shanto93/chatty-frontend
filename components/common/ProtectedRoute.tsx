@@ -6,7 +6,8 @@ import { useEffect } from "react";
 import { useAppSelector } from "../../store/store";
 
 export default function ProtectedRoute({ children }: { children: ReactNode }) {
-  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
+  const currentUser = useAppSelector((s) => s.auth.currentUser);
+  const isAuthenticated = !!currentUser;
   const router = useRouter();
 
   useEffect(() => {
